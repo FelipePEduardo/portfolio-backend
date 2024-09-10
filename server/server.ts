@@ -9,6 +9,8 @@ const { SERVER_PORT } = process.env;
 
 const app = express();
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(routes);
 
 app.listen(SERVER_PORT, async () => {

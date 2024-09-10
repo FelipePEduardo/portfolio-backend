@@ -9,8 +9,7 @@ import { UserService } from '@services';
 import { IUserRepository } from '@interfaces/repositories';
 import { UserRepository } from '@infra/data/repositories';
 
-const container = new Container();
-
+const container = new Container({ skipBaseClassChecks: true });
 /* #region Repositories */
 
 container.bind(IUserRepository).to(UserRepository);
