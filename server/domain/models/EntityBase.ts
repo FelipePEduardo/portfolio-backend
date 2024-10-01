@@ -1,8 +1,8 @@
 export interface IEntityBase {
-  id: number;
-  active: boolean;
-  createdAt: Date;
-  updateAt: Date | null;
+  id?: number;
+  active?: boolean;
+  createdAt?: Date;
+  updateAt?: Date | null;
 }
 
 export abstract class EntityBase {
@@ -33,4 +33,12 @@ export abstract class EntityBase {
   }
 
   /* #endregion */
+
+  public applyChanges<T>(entity: any, dto: T, settersDictionary: Record<string, unknown>) {
+    Object.entries(dto).forEach(([key, value]) => {
+      if (settersDictionary[key] !== undefined && value !== undefined) settersDictionary[key].bind(entity)(value);
+    });
+
+    this.setUpdatedAt();
+  }
 }
