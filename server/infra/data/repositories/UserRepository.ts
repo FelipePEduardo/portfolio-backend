@@ -37,9 +37,9 @@ export default class UserRepository extends BaseRepository implements IUserRepos
   }
 
   async create(entity: User) {
-    const mountUserToCreate = this.mountUserToCreate(entity);
+    const userToCreate = this.mountUserToCreate(entity);
 
-    const [createdId] = await this.connection('users').insert(mountUserToCreate);
+    const [createdId] = await this.connection('users').insert(userToCreate);
 
     const userCreated = await this.getById(createdId);
 
@@ -49,9 +49,9 @@ export default class UserRepository extends BaseRepository implements IUserRepos
   }
 
   async update(entity: User) {
-    const mountUserToUpdate = this.mountUserToUpdate(entity);
+    const userToUpdate = this.mountUserToUpdate(entity);
 
-    await this.connection('users').update(mountUserToUpdate).where('id', entity.id);
+    await this.connection('users').update(userToUpdate).where('id', entity.id);
 
     const updatedUser = await this.getById(entity.id);
 
@@ -75,7 +75,7 @@ export default class UserRepository extends BaseRepository implements IUserRepos
       name: entity.getName(),
       email: entity.getEmail(),
       password: entity.getPassword(),
-      admin: entity.isAdmin,
+      is_admin: entity.isAdmin,
       created_at: entity.createdAt,
       updated_at: entity.getUpdatedAt(),
       active: entity.active,

@@ -51,7 +51,7 @@ export default class UserController implements IUserController {
 
     await this.service.inactivate(id);
 
-    return res.status(204).send();
+    return res.sendStatus(204);
   }
 
   async reactivate(req: Request, res: Response) {
@@ -61,6 +61,6 @@ export default class UserController implements IUserController {
 
     await this.service.reactivate(id);
 
-    return res.status(204).send();
+    return res.sendStatus(204);
   }
 }
