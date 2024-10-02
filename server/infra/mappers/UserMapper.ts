@@ -1,5 +1,5 @@
-import { UserQueryResponse, UserSearchQueryReponse } from '@infra/data/query-responses';
-import { User } from '@models/User';
+import { UserPartialQueryResponse, UserQueryResponse, UserSearchQueryReponse } from '@infra/data/query-responses';
+import { User, UserPartial } from '@models/User';
 import { UserSearchDto } from 'server/DTO';
 
 export default abstract class UserMapper {
@@ -13,6 +13,13 @@ export default abstract class UserMapper {
       createdAt: query.created_at,
       updateAt: query.updated_at,
       active: query.active === 1,
+    });
+  }
+
+  static mapPartial(query: UserPartialQueryResponse): UserPartial {
+    return new UserPartial({
+      id: query.id,
+      name: query.name,
     });
   }
 
