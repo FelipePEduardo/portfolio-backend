@@ -3,7 +3,7 @@ import { IUserRepository } from '@interfaces/repositories';
 import BaseRepository from './BaseRepository';
 import { getCountFromResponse } from './helpers';
 import UserMapper from '@infra/mappers/UserMapper';
-import { UserSearchQueryReponse } from '../query-responses';
+import { UserPartialQueryResponse, UserSearchQueryReponse } from '../query-responses';
 import { User } from '@models/User';
 
 @injectable()
@@ -14,6 +14,14 @@ export default class UserRepository extends BaseRepository implements IUserRepos
     if (!query) return undefined;
 
     return UserMapper.mapOne(query);
+  }
+
+  async getPartialById(id: number) {
+    const query = await this.connection('users').select<UserPartialQueryResponse>('id', 'name').where('id', id).first();
+
+    if (!query) return undefined;
+
+    return UserMapper.mapPartial(query);
   }
 
   async getByEmail(email: string) {
