@@ -5,7 +5,7 @@ import container from '@infra/IoC';
 const controller = container.get(IUserController);
 const userRoutes = Router();
 
-userRoutes.get('/', controller.search.bind(controller));
+userRoutes.get('/search', controller.search.bind(controller));
 userRoutes.get('/:id', controller.getById.bind(controller));
 userRoutes.post('/', controller.create.bind(controller));
 userRoutes.patch('/:id', controller.update.bind(controller));

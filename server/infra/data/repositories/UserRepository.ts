@@ -32,14 +32,10 @@ export default class UserRepository extends BaseRepository implements IUserRepos
     return UserMapper.mapOne(query);
   }
 
-  async search() {
-    const query = await this.connection('users').select<UserSearchQueryReponse[]>(
-      'id',
-      'name',
-      'email',
-      'active',
-      this.connection.raw('COUNT(*) OVER() as count'),
-    );
+  async search(queryOptions: Record<string, unknown>) {
+    const query = await this.connection('users')
+      .select<UserSearchQueryReponse[]>('id', 'name', 'email', 'active', this.connection.raw('COUNT(*) OVER() as count'))
+      .where('name', 'like', `%${queryOptions.name}%`);
 
     return { count: getCountFromResponse(query), data: UserMapper.mapSearch(query) };
   }

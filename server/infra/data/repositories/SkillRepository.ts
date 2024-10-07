@@ -38,13 +38,10 @@ export default class SkillRepository extends BaseRepository implements ISkillRep
     return SkillMapper.mapOne(skill);
   }
 
-  async search() {
-    const query = await this.connection('skills').select<SkillSearchQueryResponse[]>(
-      'id',
-      'name',
-      'active',
-      this.connection.raw('COUNT(*) OVER() as count'),
-    );
+  async search(queryOptions: Record<string, unknown>) {
+    const query = await this.connection('skills')
+      .select<SkillSearchQueryResponse[]>('id', 'name', 'active', this.connection.raw('COUNT(*) OVER() as count'))
+      .where('name', 'like', `%${queryOptions.name}%`);
 
     return { count: getCountFromResponse(query), data: SkillMapper.mapSearch(query) };
   }
