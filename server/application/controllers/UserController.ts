@@ -2,14 +2,15 @@ import { Request, Response } from 'express';
 import { injectable } from 'inversify';
 import { IUserController } from '@interfaces/controllers';
 import { IUserService } from '@interfaces/services';
-import { validateNumericProp } from '@application/helpers';
+import { getRequestInfo, validateNumericProp } from '@application/helpers';
+import { UserCreateSchema, UserUpdateChema } from '@DTO/User';
 
 @injectable()
 export default class UserController implements IUserController {
   constructor(private service: IUserService) {}
 
   async getById(req: Request, res: Response) {
-    const { params } = req;
+    const { params } = getRequestInfo(req);
 
     const id = validateNumericProp(params.id);
 
@@ -19,7 +20,7 @@ export default class UserController implements IUserController {
   }
 
   async search(req: Request, res: Response) {
-    const { query } = req;
+    const { query } = getRequestInfo(req);
 
     const response = await this.service.search(query);
 
@@ -27,7 +28,7 @@ export default class UserController implements IUserController {
   }
 
   async create(req: Request, res: Response) {
-    const { body } = req;
+    const { body } = getRequestInfo(req, UserCreateSchema);
 
     const userCreated = await this.service.create(body);
 
@@ -35,7 +36,7 @@ export default class UserController implements IUserController {
   }
 
   async update(req: Request, res: Response) {
-    const { body, params } = req;
+    const { body, params } = getRequestInfo(req, UserUpdateChema);
 
     const id = validateNumericProp(params.id);
 
@@ -45,7 +46,7 @@ export default class UserController implements IUserController {
   }
 
   async inactivate(req: Request, res: Response) {
-    const { params } = req;
+    const { params } = getRequestInfo(req);
 
     const id = validateNumericProp(params.id);
 
@@ -55,7 +56,7 @@ export default class UserController implements IUserController {
   }
 
   async reactivate(req: Request, res: Response) {
-    const { params } = req;
+    const { params } = getRequestInfo(req);
 
     const id = validateNumericProp(params.id);
 
