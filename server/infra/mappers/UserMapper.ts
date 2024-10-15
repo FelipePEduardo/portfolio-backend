@@ -9,7 +9,7 @@ export default abstract class UserMapper {
       name: query.name,
       email: query.email,
       password: query.password,
-      isAdmin: query.admin === 1,
+      isAdmin: query.is_admin === 1,
       createdAt: query.created_at,
       updateAt: query.updated_at,
       active: query.active === 1,
