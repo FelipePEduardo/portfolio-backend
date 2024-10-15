@@ -1,18 +1,20 @@
 import { Container } from 'inversify';
 
-import { ISkillController, IUserController } from '@interfaces/controllers';
+import { IAuthController, ISkillController, IUserController } from '@interfaces/controllers';
 import UserController from '@application/controllers/UserController';
-import { SkillRepository, UserRepository } from '@infra/data/repositories';
+import SkillController from '@application/controllers/SkillController';
+import AuthController from '@application/controllers/AuthController';
 
-import { ISkillService, IUserService } from '@interfaces/services';
-import { SkillService, UserService } from '@services';
+import { IAuthService, ISkillService, IUserService } from '@interfaces/services';
+import { AuthService, SkillService, UserService } from '@services';
 
 import { ISkillRepository, IUserRepository } from '@interfaces/repositories';
-import SkillController from '@application/controllers/SkillController';
+import { SkillRepository, UserRepository } from '@infra/data/repositories';
 
 const container = new Container({ skipBaseClassChecks: true });
 /* #region Repositories */
 
+container.bind(IAuthController).to(AuthController);
 container.bind(IUserRepository).to(UserRepository);
 container.bind(ISkillRepository).to(SkillRepository);
 
@@ -20,6 +22,7 @@ container.bind(ISkillRepository).to(SkillRepository);
 
 /* #region Services */
 
+container.bind(IAuthService).to(AuthService);
 container.bind(IUserService).to(UserService);
 container.bind(ISkillService).to(SkillService);
 

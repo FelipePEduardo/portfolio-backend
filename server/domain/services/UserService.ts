@@ -22,7 +22,7 @@ export default class UserService implements IUserService {
   }
 
   async create(dto: UserCreateDto) {
-    await this.validateIfEmailAlreadyExists(dto.email)
+    await this.validateIfEmailAlreadyExists(dto.email);
 
     const hashedPassword = await bcrypt.hash(dto.password, 10);
 
