@@ -16,7 +16,7 @@ export default class UserController implements IUserController {
 
     const user = await this.service.getById(id);
 
-    return res.json(user.toDto());
+    return res.json(user.toJSON());
   }
 
   async search(req: Request, res: Response) {
@@ -32,7 +32,7 @@ export default class UserController implements IUserController {
 
     const userCreated = await this.service.create(body);
 
-    return res.status(201).json(userCreated.toDto());
+    return res.status(201).json(userCreated.toJSON());
   }
 
   async update(req: Request, res: Response) {
@@ -42,7 +42,7 @@ export default class UserController implements IUserController {
 
     const userUpdated = await this.service.update(id, body);
 
-    return res.status(200).json(userUpdated.toDto());
+    return res.status(200).json(userUpdated.toJSON());
   }
 
   async inactivate(req: Request, res: Response) {

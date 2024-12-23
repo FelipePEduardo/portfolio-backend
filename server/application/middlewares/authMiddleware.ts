@@ -15,7 +15,7 @@ export async function authMiddleware(req: Request, res: Response, next: NextFunc
   }
 
   try {
-    const token = authorization.split('Bearer ')[1];
+    const [, token] = authorization.split('Bearer ');
 
     jwt.verify(token, String(process.env.AUTH_SECRET));
 
@@ -29,7 +29,7 @@ export async function authMiddleware(req: Request, res: Response, next: NextFunc
 
     if (!user) throw new Error('User not found');
 
-    req.contextParams = user.toDto();
+    req.contextParams = user.toJSON();
 
     next();
   } catch {

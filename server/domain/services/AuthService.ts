@@ -23,6 +23,6 @@ export default class AuthService implements IAuthService {
 
     const token = jwt.sign({ id: user.id }, String(process.env.AUTH_SECRET), { expiresIn: '7d' });
 
-    return token;
+    return { user: user.toJSON(), token };
   }
 }

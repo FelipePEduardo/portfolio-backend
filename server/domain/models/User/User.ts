@@ -1,3 +1,4 @@
+import { UserDto } from '@DTO/User';
 import { EntityBase, IEntityBase } from '@models/EntityBase';
 
 interface IUserUpdate {
@@ -69,7 +70,7 @@ export class User extends EntityBase {
     this.applyChanges(this, dto, settersDictionary)
   }
 
-  public toDto() {
+  public toJSON(): UserDto {
     return {
       id: this.id,
       name: this.name,

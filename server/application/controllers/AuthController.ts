@@ -13,8 +13,8 @@ export default class AuthController implements IAuthController {
   async signIn(req: Request, res: Response) {
     const { body } = getRequestInfo(req, SignInSchema);
 
-    const token = await this.service.signIn(body);
+    const loggedUser = await this.service.signIn(body);
 
-    return res.status(200).send({ token });
+    return res.status(200).send(loggedUser);
   }
 }

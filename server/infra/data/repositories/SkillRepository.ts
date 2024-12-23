@@ -39,9 +39,12 @@ export default class SkillRepository extends BaseRepository implements ISkillRep
   }
 
   async search(queryOptions: Record<string, unknown>) {
-    const query = await this.connection('skills')
-      .select<SkillSearchQueryResponse[]>('id', 'name', 'active', this.connection.raw('COUNT(*) OVER() as count'))
-      .where('name', 'like', `%${queryOptions.name}%`);
+    const query = await this.connection('skills').select<SkillSearchQueryResponse[]>(
+      'id',
+      'name',
+      'active',
+      this.connection.raw('COUNT(*) OVER() as count'),
+    );
 
     return { count: getCountFromResponse(query), data: SkillMapper.mapSearch(query) };
   }
