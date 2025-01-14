@@ -44,16 +44,10 @@ export default class SkillService implements ISkillService {
     return this.repository.update(skill);
   }
 
-  async inactivate(id: number) {
+  async delete(id: number) {
     const skill = await this.getById(id);
 
-    await this.repository.inactivate(skill);
-  }
-
-  async reactivate(id: number) {
-    const skill = await this.getById(id);
-
-    await this.repository.reactivate(skill);
+    await this.repository.delete(skill);
   }
 
   /* #region Private */

@@ -39,12 +39,10 @@ export default class SkillRepository extends BaseRepository implements ISkillRep
   }
 
   async search(queryOptions: Record<string, unknown>) {
-    const query = await this.connection('skills').select<SkillSearchQueryResponse[]>(
-      'id',
-      'name',
-      'active',
-      this.connection.raw('COUNT(*) OVER() as count'),
-    );
+    const query = await this.connection('skills')
+      .select<SkillSearchQueryResponse[]>('id', 'name', 'active', this.connection.raw('COUNT(*) OVER() as count'))
+      .orderBy('created_at', 'desc');
+    // .where('name', 'like', `%${queryOptions.name}%`);
 
     return { count: getCountFromResponse(query), data: SkillMapper.mapSearch(query) };
   }
@@ -74,12 +72,8 @@ export default class SkillRepository extends BaseRepository implements ISkillRep
     return skillUpdated;
   }
 
-  async inactivate(entity: Skill) {
-    await this.connection('skills').update({ active: false }).where('id', entity.id).where('user_id', entity.user.id);
-  }
-
-  async reactivate(entity: Skill) {
-    await this.connection('skills').update({ active: true }).where('id', entity.id).where('user_id', entity.user.id);
+  async delete(entity: Skill) {
+    await this.connection('skills').delete().where('id', entity.id).where('user_id', entity.user.id);
   }
 
   /* #region Private */
