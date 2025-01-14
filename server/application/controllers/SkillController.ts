@@ -46,22 +46,12 @@ export default class SkillController implements ISkillController {
     return res.status(201).json(skill.toDto());
   }
 
-  async inactivate(req: Request, res: Response) {
+  async delete(req: Request, res: Response) {
     const { params } = getRequestInfo(req);
 
     const id = validateNumericProp(params.id);
 
-    await this.service.inactivate(id);
-
-    return res.sendStatus(204);
-  }
-
-  async reactivate(req: Request, res: Response) {
-    const { params } = getRequestInfo(req);
-
-    const id = validateNumericProp(params.id);
-
-    await this.service.reactivate(id);
+    await this.service.delete(id);
 
     return res.sendStatus(204);
   }
