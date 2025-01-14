@@ -25,6 +25,9 @@ const config: Knex.Config = {
   migrations: {
     directory: './server/infra/data/migrations',
   },
+  seeds: {
+    directory: './server/infra/data/seeds',
+  }
 };
 
 export default config;
