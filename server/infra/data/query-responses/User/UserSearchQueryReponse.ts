@@ -4,4 +4,6 @@ export type UserSearchQueryReponse = {
   readonly email: string;
   readonly active: number;
   readonly count: number;
+  readonly userRoleId: number;
+  readonly userRoleName: string;
 };

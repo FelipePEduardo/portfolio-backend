@@ -1,7 +1,7 @@
 import { injectable } from 'inversify';
 import { IUserService } from '@interfaces/services';
 import { IUserRepository } from '@interfaces/repositories';
-import { User } from '@models/User';
+import { EnumUserRoles, User } from '@models/User';
 import { UserCreateDto, UserUpdateDto } from 'server/DTO';
 import bcrypt from 'bcrypt';
 
@@ -26,7 +26,9 @@ export default class UserService implements IUserService {
 
     const hashedPassword = await bcrypt.hash(dto.password, 10);
 
-    const userToCreate = new User({ ...dto, password: hashedPassword, isAdmin: false });
+    const userRole = await this.getUserRole('USER');
+
+    const userToCreate = new User({ ...dto, password: hashedPassword, userRole });
 
     return this.repository.create(userToCreate);
   }
@@ -77,6 +79,16 @@ export default class UserService implements IUserService {
 
       return bcrypt.hash(newPassword, 10);
     }
+  }
+
+  private async getUserRole(role: 'USER' | 'ADMIN' | 'MASTER') {
+    const userRoleId = EnumUserRoles[role];
+
+    const userRole = await this.repository.getUserRoleByid(userRoleId);
+
+    if (!userRole) throw new Error('User role not found');
+
+    return userRole;
   }
 
   /* #endregion */

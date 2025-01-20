@@ -5,6 +5,7 @@ import { ISkillController } from '@interfaces/controllers';
 import { ISkillService } from '@interfaces/services';
 import { getRequestInfo, validateNumericProp } from '@application/helpers';
 import { SkillCreateSchema, SkillUpdateSchema } from '@DTO/Skill';
+import { validateContextParams } from '@application/helpers/validateContextParams';
 
 @injectable()
 export default class SkillController implements ISkillController {
@@ -29,9 +30,11 @@ export default class SkillController implements ISkillController {
   }
 
   async create(req: Request, res: Response) {
-    const { body } = getRequestInfo(req, SkillCreateSchema);
+    const { body, contextParams } = getRequestInfo(req, SkillCreateSchema);
 
-    const skill = await this.service.create(body);
+    const validatedContextParams = validateContextParams(contextParams);
+
+    const skill = await this.service.create(body, validatedContextParams);
 
     return res.status(201).json(skill.toDto());
   }

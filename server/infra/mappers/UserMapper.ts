@@ -1,5 +1,5 @@
 import { UserPartialQueryResponse, UserQueryResponse, UserSearchQueryReponse } from '@infra/data/query-responses';
-import { User, UserPartial } from '@models/User';
+import { User, UserPartial, UserRole } from '@models/User';
 import { UserSearchDto } from 'server/DTO';
 
 export default abstract class UserMapper {
@@ -9,10 +9,10 @@ export default abstract class UserMapper {
       name: query.name,
       email: query.email,
       password: query.password,
-      isAdmin: query.is_admin === 1,
-      createdAt: query.created_at,
-      updateAt: query.updated_at,
+      createdAt: query.createdAt,
+      updateAt: query.updatedAt,
       active: query.active === 1,
+      userRole: new UserRole({ id: query.userRoleId, name: query.userRoleName }),
     });
   }
 
@@ -29,6 +29,10 @@ export default abstract class UserMapper {
       name: row.name,
       email: row.email,
       active: row.active === 1,
+      userRole: {
+        id: row.userRoleId,
+        name: row.userRoleName,
+      },
     }));
   }
 }
