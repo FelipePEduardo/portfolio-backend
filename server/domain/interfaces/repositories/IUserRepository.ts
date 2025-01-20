@@ -1,4 +1,4 @@
-import { User, UserPartial } from '@models/User';
+import { User, UserPartial, UserRole } from '@models/User';
 import { SearchReponse, UserSearchDto } from 'server/DTO';
 
 export default abstract class IUserRepository {
@@ -10,4 +10,7 @@ export default abstract class IUserRepository {
   abstract update(entity: User): Promise<User>;
   abstract inactivate(id: number): Promise<void>;
   abstract reactivate(id: number): Promise<void>;
+
+  /* User Role */
+  abstract getUserRoleByid(id: number): Promise<UserRole | undefined>;
 }

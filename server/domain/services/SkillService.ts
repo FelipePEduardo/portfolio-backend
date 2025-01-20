@@ -4,6 +4,7 @@ import { ISkillService } from '@interfaces/services';
 import { ISkillRepository, IUserRepository } from '@interfaces/repositories';
 import { SkillCreateDto, SkillUpdateDto } from '@DTO';
 import { Skill } from '@models/Skill';
+import { ContextParams } from '@DTO/ContexParams';
 
 @injectable()
 export default class SkillService implements ISkillService {
@@ -24,10 +25,10 @@ export default class SkillService implements ISkillService {
     return this.repository.search(queryOptions);
   }
 
-  async create(dto: SkillCreateDto) {
+  async create(dto: SkillCreateDto, contextParams: ContextParams) {
     await this.validateIfSkillAlreadyExists(dto.name);
 
-    const user = await this.getUser();
+    const user = await this.getUserById(contextParams.id);
 
     const skillToCreate = new Skill({ ...dto, user });
 
@@ -60,8 +61,8 @@ export default class SkillService implements ISkillService {
     if (skillAlreadyExists) throw new Error('Skill already exists');
   }
 
-  private async getUser() {
-    const user = await this.userRepository.getPartialById(1);
+  private async getUserById(userId: number) {
+    const user = await this.userRepository.getPartialById(userId);
 
     if (!user) throw new Error('User not found');
 

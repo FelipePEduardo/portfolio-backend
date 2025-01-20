@@ -3,8 +3,9 @@ export type UserQueryResponse = {
   readonly name: string;
   readonly email: string;
   readonly password: string;
-  readonly is_admin: number;
-  readonly created_at: Date;
-  readonly updated_at: Date | null;
+  readonly createdAt: Date;
+  readonly updatedAt: Date | null;
   readonly active: number;
+  readonly userRoleId: number;
+  readonly userRoleName: string;
 };

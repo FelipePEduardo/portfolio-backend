@@ -1,31 +1,33 @@
-import { UserDto } from '@DTO/User';
+import { UserDto, UserRoleDto } from '@DTO/User';
 import { EntityBase, IEntityBase } from '@models/EntityBase';
+import { UserRole } from './UserRole';
 
 interface IUserUpdate {
   name?: string;
   email?: string;
   password?: string;
+  userRole?: UserRoleDto;
 }
 
 export interface IUser extends IEntityBase {
   name: string;
   email: string;
   password: string;
-  isAdmin: boolean;
+  userRole: UserRole;
 }
 
 export class User extends EntityBase {
   protected name: string;
   protected email: string;
   protected password: string;
-  readonly isAdmin: boolean;
+  protected userRole: UserRole;
 
   constructor(props: IUser) {
     super(props);
     this.name = props.name;
     this.email = props.email;
     this.password = props.password;
-    this.isAdmin = props.isAdmin;
+    this.userRole = props.userRole;
   }
 
   /* #region Getters */
@@ -40,6 +42,10 @@ export class User extends EntityBase {
 
   public getPassword() {
     return this.password;
+  }
+
+  public getUserRole() {
+    return this.userRole;
   }
 
   /* #endregion */
@@ -58,6 +64,10 @@ export class User extends EntityBase {
     this.password = password;
   }
 
+  public setUserRole(userRole: UserRole) {
+    this.userRole = userRole;
+  }
+
   /* #endregion */
 
   public update(dto: IUserUpdate) {
@@ -65,9 +75,10 @@ export class User extends EntityBase {
       name: this.setName,
       email: this.setEmail,
       password: this.setPassword,
+      userRole: this.setUserRole,
     };
 
-    this.applyChanges(this, dto, settersDictionary)
+    this.applyChanges(this, dto, settersDictionary);
   }
 
   public toJSON(): UserDto {
@@ -76,7 +87,7 @@ export class User extends EntityBase {
       name: this.name,
       email: this.email,
       active: this.active,
-      isAdmin: this.isAdmin,
+      userRole: this.userRole.toJSON(),
     };
   }
 }

@@ -46,7 +46,7 @@ export default class SkillRepository extends BaseRepository implements ISkillRep
 
     return { count: getCountFromResponse(query), data: SkillMapper.mapSearch(query) };
   }
-
+  
   async create(entity: Skill) {
     const skillToCreate = this.mountSkillToCreate(entity);
 

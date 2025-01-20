@@ -3,13 +3,28 @@ import { IUserRepository } from '@interfaces/repositories';
 import BaseRepository from './BaseRepository';
 import { getCountFromResponse } from './helpers';
 import UserMapper from '@infra/mappers/UserMapper';
-import { UserPartialQueryResponse, UserSearchQueryReponse } from '../query-responses';
+import { UserPartialQueryResponse, UserQueryResponse, UserRoleQueryResponse, UserSearchQueryReponse } from '../query-responses';
 import { User } from '@models/User';
+import UserRoleMapper from '@infra/mappers/UserRoleMapper';
 
 @injectable()
 export default class UserRepository extends BaseRepository implements IUserRepository {
   async getById(id: number) {
-    const query = await this.connection('users').select('*').where('id', id).first();
+    const query = await this.connection('users')
+      .select<UserQueryResponse>(
+        'users.id',
+        'users.name',
+        'users.email',
+        'users.password',
+        'users.created_at as createdAt',
+        'users.updated_at as updatedAt',
+        'users.active',
+        'user_role.id as userRoleId',
+        'user_role.name as userRoleName',
+      )
+      .innerJoin('user_role', 'users.user_role_id', 'user_role.id')
+      .where('users.id', id)
+      .first();
 
     if (!query) return undefined;
 
@@ -25,7 +40,21 @@ export default class UserRepository extends BaseRepository implements IUserRepos
   }
 
   async getByEmail(email: string) {
-    const query = await this.connection('users').select('*').where('email', email).first();
+    const query = await this.connection('users')
+      .select<UserQueryResponse>(
+        'users.id',
+        'users.name',
+        'users.email',
+        'users.password',
+        'users.created_at as createdAt',
+        'users.updated_at as updatedAt',
+        'users.active',
+        'user_role.id as userRoleId',
+        'user_role.name as userRoleName',
+      )
+      .innerJoin('user_role', 'users.user_role_id', 'user_role.id')
+      .where('email', email)
+      .first();
 
     if (!query) return undefined;
 
@@ -34,8 +63,17 @@ export default class UserRepository extends BaseRepository implements IUserRepos
 
   async search(queryOptions: Record<string, unknown>) {
     const query = await this.connection('users')
-      .select<UserSearchQueryReponse[]>('id', 'name', 'email', 'active', this.connection.raw('COUNT(*) OVER() as count'))
-      // .where('name', 'like', `%${queryOptions.name}%`);
+      .innerJoin('user_role', 'users.user_role_id', 'user_role.id')
+      .select<UserSearchQueryReponse[]>(
+        'users.id', 
+        'users.name', 
+        'users.email', 
+        'users.active', 
+        'user_role.id as userRoleId', 
+        'user_role.name as userRoleName', 
+        this.connection.raw('COUNT(*) OVER() as count')
+      );
+    // .where('name', 'like', `%${queryOptions.name}%`);
 
     return { count: getCountFromResponse(query), data: UserMapper.mapSearch(query) };
   }
@@ -64,13 +102,25 @@ export default class UserRepository extends BaseRepository implements IUserRepos
     return updatedUser;
   }
 
-  async inactivate(id: number): Promise<void> {
+  async inactivate(id: number) {
     await this.connection('users').update({ active: false }).where('id', id).andWhere('active', true);
   }
 
-  async reactivate(id: number): Promise<void> {
+  async reactivate(id: number) {
     await this.connection('users').update({ active: true }).where('id', id).andWhere('active', false);
   }
+
+  /* #region User Role */
+
+  async getUserRoleByid(id: number) {
+    const query = await this.connection<UserRoleQueryResponse>('user_role').select('*').where('id', id).first();
+
+    if (!query) return undefined;
+
+    return UserRoleMapper.mapOne(query);
+  }
+
+  /* #endregion */
 
   /* #region private methods */
 
@@ -79,7 +129,7 @@ export default class UserRepository extends BaseRepository implements IUserRepos
       name: entity.getName(),
       email: entity.getEmail(),
       password: entity.getPassword(),
-      is_admin: entity.isAdmin,
+      user_role_id: entity.getUserRole().id,
       created_at: entity.createdAt,
       updated_at: entity.getUpdatedAt(),
       active: entity.active,
