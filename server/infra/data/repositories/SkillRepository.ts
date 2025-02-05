@@ -1,5 +1,5 @@
 import { injectable } from 'inversify';
-import { getCountFromResponse } from './helpers';
+import { getCountFromResponse, QueryHelper } from './helpers';
 
 import { ISkillRepository } from '@interfaces/repositories';
 import { SkillQueryResponse, SkillSearchQueryResponse } from '../query-responses';
@@ -10,6 +10,10 @@ import { Skill } from '@models/Skill';
 
 @injectable()
 export default class SkillRepository extends BaseRepository implements ISkillRepository {
+  readonly mappedProperties = {
+    name: 'name',
+  };
+
   async getById(id: number) {
     const skill = await this.connection('skills')
       .select<SkillQueryResponse>(
@@ -39,14 +43,16 @@ export default class SkillRepository extends BaseRepository implements ISkillRep
   }
 
   async search(queryOptions: Record<string, unknown>) {
+    const queryParsed = QueryHelper.parseQueryOptions(queryOptions, this.mappedProperties);
+
     const query = await this.connection('skills')
       .select<SkillSearchQueryResponse[]>('id', 'name', 'active', this.connection.raw('COUNT(*) OVER() as count'))
-      .orderBy('created_at', 'desc');
-    // .where('name', 'like', `%${queryOptions.name}%`);
+      .orderBy('created_at', 'desc')
+      .where((builder) => QueryHelper.queryBuilder(builder, queryParsed));
 
     return { count: getCountFromResponse(query), data: SkillMapper.mapSearch(query) };
   }
-  
+
   async create(entity: Skill) {
     const skillToCreate = this.mountSkillToCreate(entity);
 

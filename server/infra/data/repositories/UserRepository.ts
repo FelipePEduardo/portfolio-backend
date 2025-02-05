@@ -1,7 +1,7 @@
 import { injectable } from 'inversify';
 import { IUserRepository } from '@interfaces/repositories';
 import BaseRepository from './BaseRepository';
-import { getCountFromResponse } from './helpers';
+import { getCountFromResponse, QueryHelper } from './helpers';
 import UserMapper from '@infra/mappers/UserMapper';
 import { UserPartialQueryResponse, UserQueryResponse, UserRoleQueryResponse, UserSearchQueryReponse } from '../query-responses';
 import { User } from '@models/User';
@@ -9,6 +9,11 @@ import UserRoleMapper from '@infra/mappers/UserRoleMapper';
 
 @injectable()
 export default class UserRepository extends BaseRepository implements IUserRepository {
+  readonly mappedProperties = {
+    name: 'users.name',
+    email: 'users.email',
+  };
+
   async getById(id: number) {
     const query = await this.connection('users')
       .select<UserQueryResponse>(
@@ -62,18 +67,20 @@ export default class UserRepository extends BaseRepository implements IUserRepos
   }
 
   async search(queryOptions: Record<string, unknown>) {
+    const queryParsed = QueryHelper.parseQueryOptions(queryOptions, this.mappedProperties);
+
     const query = await this.connection('users')
       .innerJoin('user_role', 'users.user_role_id', 'user_role.id')
       .select<UserSearchQueryReponse[]>(
-        'users.id', 
-        'users.name', 
-        'users.email', 
-        'users.active', 
-        'user_role.id as userRoleId', 
-        'user_role.name as userRoleName', 
-        this.connection.raw('COUNT(*) OVER() as count')
-      );
-    // .where('name', 'like', `%${queryOptions.name}%`);
+        'users.id',
+        'users.name',
+        'users.email',
+        'users.active',
+        'user_role.id as userRoleId',
+        'user_role.name as userRoleName',
+        this.connection.raw('COUNT(*) OVER() as count'),
+      )
+      .where((builder) => QueryHelper.queryBuilder(builder, queryParsed));
 
     return { count: getCountFromResponse(query), data: UserMapper.mapSearch(query) };
   }
