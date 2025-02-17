@@ -2,7 +2,7 @@ import type { Knex } from 'knex';
 
 export async function up(knex: Knex): Promise<void> {
   return knex.schema.alterTable('users', (table) => {
-    table.integer('user_role_id').unsigned().references('id').inTable('user_role').notNullable();
+    table.integer('user_role_id').unsigned().references('id').inTable('user_role').notNullable().onDelete('cascade');
     table.dropColumn('is_admin');
   });
 }
