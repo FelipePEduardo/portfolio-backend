@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 
-export async function masterOrAdminMiddleWare(req: Request, res: Response, next: NextFunction) {
+export async function masterOrAdminMiddleware(req: Request, res: Response, next: NextFunction) {
   const { contextParams } = req;
 
   if (!contextParams) throw new Error('Unauthorized');

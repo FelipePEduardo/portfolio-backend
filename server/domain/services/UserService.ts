@@ -34,13 +34,17 @@ export default class UserService implements IUserService {
   }
 
   async update(id: number, dto: UserUpdateDto) {
-    await this.validateIfEmailAlreadyExists(dto.email);
-
     const user = await this.getById(id);
+
+    const hasChangedEmail = user.getEmail() !== dto.email;
+
+    if (hasChangedEmail) await this.validateIfEmailAlreadyExists(dto.email);
 
     const newPasswordHashed = await this.validateOldAndNewPassword(dto.oldPassword, dto.newPassword, user.getPassword());
 
-    user.update({ name: dto.name, email: dto.email, password: newPasswordHashed });
+    const userRole = await this.getUserRole(dto.userRole);
+
+    user.update({ name: dto.name, email: dto.email, password: newPasswordHashed, userRole });
 
     return this.repository.update(user);
   }

@@ -149,6 +149,7 @@ export default class UserRepository extends BaseRepository implements IUserRepos
       email: entity.getEmail(),
       password: entity.getPassword(),
       updated_at: entity.getUpdatedAt(),
+      user_role_id: entity.getUserRole().id,
     };
   }
 
