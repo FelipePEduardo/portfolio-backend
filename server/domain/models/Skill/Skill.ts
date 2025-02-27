@@ -43,7 +43,7 @@ export class Skill extends EntityBase {
       name: this.setName,
     };
 
-    this.applyChanges(this, dto, settersDictionary);
+    this.applyChanges(dto, settersDictionary);
   }
 
   public toDto(): SkillDto {

@@ -4,7 +4,9 @@
   "description": "A simple backend for my portfolio",
   "main": "server/server.ts",
   "scripts": {
-    "dev": "ts-node-dev -r tsconfig-paths/register --respawn --transpile-only server/server.ts"
+    "dev": "ts-node-dev -r tsconfig-paths/register --respawn --transpile-only server/server.ts",
+    "build": "tsc",
+    "start": "node dist/index.js"
   },
   "keywords": [],
   "author": "Felipe Pereira Eduardo",

@@ -78,7 +78,7 @@ export class User extends EntityBase {
       userRole: this.setUserRole,
     };
 
-    this.applyChanges(this, dto, settersDictionary);
+    this.applyChanges(dto, settersDictionary);
   }
 
   public toJSON(): UserDto {

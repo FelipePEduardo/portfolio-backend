@@ -5,6 +5,9 @@ export interface IEntityBase {
   updateAt?: Date | null;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
+type SettersDictionaryType<T> = Record<keyof T, Function>;
+
 export abstract class EntityBase {
   readonly id: number;
   readonly active: boolean;
@@ -34,9 +37,10 @@ export abstract class EntityBase {
 
   /* #endregion */
 
-  public applyChanges<T>(entity: any, dto: T, settersDictionary: Record<string, unknown>) {
-    Object.entries(dto).forEach(([key, value]) => {
-      if (settersDictionary[key] !== undefined && value !== undefined) settersDictionary[key].bind(entity)(value);
+  public applyChanges<T extends object>(entity: T, settersDictionary: SettersDictionaryType<T>) {
+    Object.entries(entity).forEach(([key, value]) => {
+      if (settersDictionary[key as keyof T] !== undefined && value !== undefined)
+        settersDictionary[key as keyof T].bind(this)(value);
     });
 
     this.setUpdatedAt();
