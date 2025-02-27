@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "ts-node-dev -r tsconfig-paths/register --respawn --transpile-only server/server.ts",
     "build": "tsc",
-    "start": "node dist/server/index.js",
+    "start": "node dist/server/server.js",
     "migrate": "knex migrate:latest",
     "seed": "knex seed:run"
   },
