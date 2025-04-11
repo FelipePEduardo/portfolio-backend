@@ -13,6 +13,7 @@ export default class GithubDAO extends BaseDAO implements IGithubDAO {
       .get<UserInformationDto>('https://api.github.com/users/FelipePEduardo', {
         headers: {
           'X-GitHub-Api-Version': '2022-11-28',
+          'Access-Control-Allow-Origin': 'https://portfolio-backend-fnac.onrender.com',
         },
       })
       .then((response) => response.data);
@@ -23,6 +24,7 @@ export default class GithubDAO extends BaseDAO implements IGithubDAO {
       .get<RepositoriesDto>('https://api.github.com/users/FelipePEduardo/repos?sort=pushed&per_page=12', {
         headers: {
           'X-GitHub-Api-Version': '2022-11-28',
+          'Access-Control-Allow-Origin': 'https://portfolio-backend-fnac.onrender.com',
         },
       })
       .then((response) => response.data);
