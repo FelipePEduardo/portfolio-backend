@@ -16,7 +16,7 @@ export default class GithubDAO extends BaseDAO implements IGithubDAO {
       .get<UserInformationDto>('https://api.github.com/users/FelipePEduardo', {
         headers: {
           'X-GitHub-Api-Version': '2022-11-28',
-          Authorization: this.token,
+          Authorization: `Bearer ${this.token}`,
         },
       })
       .then((response) => response.data);
@@ -27,7 +27,7 @@ export default class GithubDAO extends BaseDAO implements IGithubDAO {
       .get<RepositoriesDto>('https://api.github.com/users/FelipePEduardo/repos?sort=pushed&per_page=12', {
         headers: {
           'X-GitHub-Api-Version': '2022-11-28',
-          Authorization: this.token,
+          Authorization: `Bearer ${this.token}`,
         },
       })
       .then((response) => response.data);
