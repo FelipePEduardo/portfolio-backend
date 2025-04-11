@@ -1,7 +1,9 @@
 import Knex from 'knex';
 import config from '../../../knexfile';
+import 'dotenv/config';
 
-const DatabaseConnection = Knex(config);
+const { NODE_ENV } = process.env;
+const DatabaseConnection = Knex(config[String(NODE_ENV) as 'development' | 'production']);
 
 export async function testConnection() {
   try {
