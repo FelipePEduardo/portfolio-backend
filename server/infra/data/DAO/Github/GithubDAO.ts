@@ -14,6 +14,7 @@ export default class GithubDAO extends BaseDAO implements IGithubDAO {
         headers: {
           'X-GitHub-Api-Version': '2022-11-28',
           'Access-Control-Allow-Origin': 'https://portfolio-backend-fnac.onrender.com',
+          'Content-Type': 'application/json; charset=utf-8',
         },
       })
       .then((response) => response.data);
@@ -25,6 +26,7 @@ export default class GithubDAO extends BaseDAO implements IGithubDAO {
         headers: {
           'X-GitHub-Api-Version': '2022-11-28',
           'Access-Control-Allow-Origin': 'https://portfolio-backend-fnac.onrender.com',
+          'Content-Type': 'application/json; charset=utf-8',
         },
       })
       .then((response) => response.data);
