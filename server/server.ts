@@ -6,7 +6,7 @@ import routes from '@application/routes';
 
 import { testConnection } from '@infra/data/DatabaseConnection';
 
-const { SERVER_PORT } = process.env;
+const port = process.env.SERVER_PORT ?? 3000;
 
 const app = express();
 
@@ -15,7 +15,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.use(routes);
 
-app.listen(SERVER_PORT, async () => {
+app.listen(port, async () => {
   await testConnection();
-  return console.log(`Server is running on port ${SERVER_PORT}`);
+  return console.log(`Server is running on port ${port}`);
 });
