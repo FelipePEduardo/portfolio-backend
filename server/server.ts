@@ -6,7 +6,7 @@ import routes from '@application/routes';
 
 import { testConnection } from '@infra/data/DatabaseConnection';
 
-const port = process.env.SERVER_PORT ?? 3000;
+const port = process.env.SERVER_PORT ?? 3001;
 
 const app = express();
 
