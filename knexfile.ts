@@ -39,6 +39,9 @@ const config: Record<'development' | 'production', Knex.Config> = {
     migrations: {
       directory: path.resolve(__dirname, 'server', 'infra', 'data', 'migrations'),
     },
+    seeds: {
+      directory: path.resolve(__dirname, 'server', 'infra', 'data', 'seeds'),
+    },
   },
 };
 
