@@ -86,7 +86,6 @@ export default class SkillRepository extends BaseRepository implements ISkillRep
 
   private mountSkillToCreate(entity: Skill) {
     return {
-      id: entity.id,
       name: entity.getName(),
       created_at: entity.createdAt,
       updated_at: null,
