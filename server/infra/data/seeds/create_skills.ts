@@ -8,7 +8,7 @@ export async function seed(knex: Knex): Promise<void> {
     { id: 2, name: 'TypeScript', user_id: 1, created_at: new Date(), active: 1 },
     { id: 3, name: 'Node.js', user_id: 1, created_at: new Date(), active: 1 },
     { id: 4, name: 'Express', user_id: 1, created_at: new Date(), active: 1 },
-    { id: 6, name: 'Vue.js', user_id: 1, created_at: new Date(), active: 1 },
+    { id: 5, name: 'Vue.js', user_id: 1, created_at: new Date(), active: 1 },
     { id: 6, name: 'SQL', user_id: 1, created_at: new Date(), active: 1 },
     { id: 7, name: 'MySQL', user_id: 1, created_at: new Date(), active: 1 },
     { id: 8, name: 'MongoDB', user_id: 1, created_at: new Date(), active: 1 },
