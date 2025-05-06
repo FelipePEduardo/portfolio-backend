@@ -3,15 +3,17 @@ import { injectable } from 'inversify';
 
 import { IAuthController } from '@interfaces/controllers';
 import { IAuthService } from '@interfaces/services';
-import { getRequestInfo } from '@application/helpers';
 import { SignInSchema } from '@DTO/Auth';
+import { getAuthParamsFromRequest } from '@application/helpers/getAuthParamsFromRequest';
 
 @injectable()
 export default class AuthController implements IAuthController {
   constructor(private service: IAuthService) {}
 
   async signIn(req: Request, res: Response) {
-    const { body } = getRequestInfo(req, SignInSchema);
+    const { email, password } = getAuthParamsFromRequest(req);
+
+    const body = SignInSchema.parse({ email, password });
 
     const loggedUser = await this.service.signIn(body);
 
