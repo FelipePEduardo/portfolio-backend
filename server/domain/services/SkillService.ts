@@ -9,8 +9,8 @@ import { ContextParams } from '@DTO/ContexParams';
 @injectable()
 export default class SkillService implements ISkillService {
   constructor(
-    private repository: ISkillRepository,
-    private userRepository: IUserRepository,
+    private readonly repository: ISkillRepository,
+    private readonly userRepository: IUserRepository,
   ) {}
 
   async getById(id: number) {
@@ -32,7 +32,9 @@ export default class SkillService implements ISkillService {
 
     const skillToCreate = new Skill({ ...dto, user });
 
-    return this.repository.create(skillToCreate);
+    const created = await this.repository.create(skillToCreate);
+
+    return created.toDto();
   }
 
   async update(id: number, dto: SkillUpdateDto) {
@@ -42,7 +44,9 @@ export default class SkillService implements ISkillService {
 
     skill.update(dto);
 
-    return this.repository.update(skill);
+    const updated = await this.repository.update(skill);
+
+    return updated.toDto();
   }
 
   async delete(id: number) {

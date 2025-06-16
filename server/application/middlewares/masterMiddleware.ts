@@ -10,5 +10,5 @@ export async function masterMiddleware(req: Request, res: Response, next: NextFu
     return;
   }
 
-  throw new Error('Unauthorized');
+  next(new Error('Unauthorized'));
 }

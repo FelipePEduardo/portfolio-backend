@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { Request } from 'express';
 import { injectable } from 'inversify';
 
 import { IAuthController } from '@interfaces/controllers';
@@ -10,13 +10,11 @@ import { getAuthParamsFromRequest } from '@application/helpers/getAuthParamsFrom
 export default class AuthController implements IAuthController {
   constructor(private service: IAuthService) {}
 
-  async signIn(req: Request, res: Response) {
+  async signIn(req: Request) {
     const { email, password } = getAuthParamsFromRequest(req);
 
     const body = SignInSchema.parse({ email, password });
 
-    const loggedUser = await this.service.signIn(body);
-
-    return res.status(200).send(loggedUser);
+    return this.service.signIn(body);
   }
 }

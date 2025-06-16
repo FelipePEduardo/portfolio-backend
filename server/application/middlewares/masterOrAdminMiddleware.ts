@@ -10,5 +10,5 @@ export async function masterOrAdminMiddleware(req: Request, res: Response, next:
     return;
   }
 
-  throw new Error('Unauthorized');
+  next(new Error('Unauthorized'));
 }

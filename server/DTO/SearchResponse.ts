@@ -1,4 +1,4 @@
-export type SearchReponse<T> = {
+export type SearchResponse<T> = {
   count: number;
   data: T[];
 };

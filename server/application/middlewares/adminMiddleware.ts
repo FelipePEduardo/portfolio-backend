@@ -10,5 +10,5 @@ export async function adminMiddleware(req: Request, res: Response, next: NextFun
     return;
   }
 
-  throw new Error('Unauthorized');
+  next(new Error('Unauthorized'));
 }

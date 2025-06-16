@@ -9,7 +9,7 @@ import { RepositoriesDto, UserInformationDto } from '@DTO/Github';
 
 @injectable()
 export default class GithubDAO extends BaseDAO implements IGithubDAO {
-  private token = process.env.GITHUB_TOKEN;
+  private readonly token = process.env.GITHUB_TOKEN;
 
   async getUserInformation() {
     return axios
