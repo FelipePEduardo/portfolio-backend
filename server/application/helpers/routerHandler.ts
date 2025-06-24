@@ -18,7 +18,8 @@ async function handleFuntion<T>(
 
     return res.json(result).status(config.status);
   } catch (error) {
-    next(error);
+    // @ts-ignore
+    return next(error);
   }
 }
 

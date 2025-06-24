@@ -14,7 +14,7 @@ export default class SkillController implements ISkillController {
   async getById(req: Request) {
     const { params } = getRequestInfo(req);
 
-    const id = validateNumericProp(params.id);
+    const id = validateNumericProp(params.id, 'id');
 
     const entity = await this.service.getById(id);
 
@@ -38,7 +38,7 @@ export default class SkillController implements ISkillController {
   async update(req: Request) {
     const { body, params } = getRequestInfo(req, SkillUpdateSchema);
 
-    const id = validateNumericProp(params.id);
+    const id = validateNumericProp(params.id, 'id');
 
     return this.service.update(id, body);
   }
@@ -46,7 +46,7 @@ export default class SkillController implements ISkillController {
   async delete(req: Request) {
     const { params } = getRequestInfo(req);
 
-    const id = validateNumericProp(params.id);
+    const id = validateNumericProp(params.id, 'id');
 
     await this.service.delete(id);
   }

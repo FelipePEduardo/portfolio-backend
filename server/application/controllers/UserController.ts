@@ -12,7 +12,7 @@ export default class UserController implements IUserController {
   async getById(req: Request) {
     const { params } = getRequestInfo(req);
 
-    const id = validateNumericProp(params.id);
+    const id = validateNumericProp(params.id, 'id');
 
     const user = await this.service.getById(id);
 
@@ -36,7 +36,7 @@ export default class UserController implements IUserController {
   async update(req: Request) {
     const { body, params } = getRequestInfo(req, UserUpdateChema);
 
-    const id = validateNumericProp(params.id);
+    const id = validateNumericProp(params.id, 'id');
 
     const userUpdated = await this.service.update(id, body);
 
@@ -46,7 +46,7 @@ export default class UserController implements IUserController {
   async inactivate(req: Request) {
     const { params } = getRequestInfo(req);
 
-    const id = validateNumericProp(params.id);
+    const id = validateNumericProp(params.id, 'id');
 
     await this.service.inactivate(id);
   }
@@ -54,7 +54,7 @@ export default class UserController implements IUserController {
   async reactivate(req: Request) {
     const { params } = getRequestInfo(req);
 
-    const id = validateNumericProp(params.id);
+    const id = validateNumericProp(params.id, 'id');
 
     await this.service.reactivate(id);
   }

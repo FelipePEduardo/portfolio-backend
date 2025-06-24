@@ -5,6 +5,7 @@ import { ISkillRepository, IUserRepository } from '@interfaces/repositories';
 import { SkillCreateDto, SkillUpdateDto } from '@DTO';
 import { Skill } from '@models/Skill';
 import { ContextParams } from '@DTO/ContexParams';
+import { EntityNotFound } from 'server/errors';
 
 @injectable()
 export default class SkillService implements ISkillService {
@@ -16,7 +17,7 @@ export default class SkillService implements ISkillService {
   async getById(id: number) {
     const skill = await this.repository.getById(id);
 
-    if (!skill) throw new Error('Entity not found');
+    if (!skill) throw new EntityNotFound('Skil', id);
 
     return skill;
   }

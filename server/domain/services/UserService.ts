@@ -1,9 +1,11 @@
+import bcrypt from 'bcrypt';
 import { injectable } from 'inversify';
+
 import { IUserService } from '@interfaces/services';
 import { IUserRepository } from '@interfaces/repositories';
 import { EnumUserRoles, User } from '@models/User';
 import { UserCreateDto, UserUpdateDto } from 'server/DTO';
-import bcrypt from 'bcrypt';
+import { EntityNotFound, UnauthorizedError } from 'server/errors';
 
 @injectable()
 export default class UserService implements IUserService {
@@ -12,7 +14,7 @@ export default class UserService implements IUserService {
   async getById(id: number) {
     const user = await this.repository.getById(id);
 
-    if (!user) throw new Error('User not found');
+    if (!user) throw new EntityNotFound('User', id);
 
     return user;
   }
@@ -67,7 +69,7 @@ export default class UserService implements IUserService {
     if (email) {
       const emailAlreadyExists = await this.repository.getByEmail(email);
 
-      if (emailAlreadyExists) throw new Error('Email already exists');
+      if (emailAlreadyExists) throw new UnauthorizedError('Email already exists');
     }
   }
 
@@ -79,7 +81,7 @@ export default class UserService implements IUserService {
     if (oldPassword && newPassword) {
       const passwordMatch = await bcrypt.compare(oldPassword, userPassword);
 
-      if (!passwordMatch) throw new Error('Invalid password');
+      if (!passwordMatch) throw new UnauthorizedError('Invalid password');
 
       return bcrypt.hash(newPassword, 10);
     }
@@ -90,7 +92,7 @@ export default class UserService implements IUserService {
 
     const userRole = await this.repository.getUserRoleByid(userRoleId);
 
-    if (!userRole) throw new Error('User role not found');
+    if (!userRole) throw new EntityNotFound('Role', role);
 
     return userRole;
   }

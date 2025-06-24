@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken';
 import container from '@infra/IoC';
 import { IUserRepository } from '@interfaces/repositories';
 import { User } from '@models/User';
+import { EntityNotFound, UnauthorizedError } from 'server/errors';
 
 const userRepository = container.get(IUserRepository);
 
@@ -12,7 +13,7 @@ export async function authMiddleware(req: Request, res: Response, next: NextFunc
     const authorization = req.headers['authorization'];
 
     if (!authorization) {
-      next(new Error('Invalid token'));
+      next(new UnauthorizedError('Invalid token'));
       return;
     }
 
@@ -29,7 +30,7 @@ export async function authMiddleware(req: Request, res: Response, next: NextFunc
     }
 
     if (!user) {
-      next(new Error('User not found'));
+      next(new EntityNotFound('User not found', 404));
       return;
     }
 

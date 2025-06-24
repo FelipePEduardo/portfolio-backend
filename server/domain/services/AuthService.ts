@@ -7,6 +7,7 @@ import jwt from 'jsonwebtoken';
 import { IAuthService } from '@interfaces/services';
 import { IUserRepository } from '@interfaces/repositories';
 import { SignInDto } from '@DTO/Auth';
+import { UnauthorizedError } from 'server/errors';
 
 @injectable()
 export default class AuthService implements IAuthService {
@@ -15,11 +16,11 @@ export default class AuthService implements IAuthService {
   async signIn({ email, password }: SignInDto) {
     const user = await this.userRepository.getByEmail(email);
 
-    if (!user) throw new Error('Email or password invalid');
+    if (!user) throw new UnauthorizedError('Email or password invalid');
 
     const passwordMatch = await compare(password, user.getPassword());
 
-    if (!passwordMatch) throw new Error('Email or password invalid');
+    if (!passwordMatch) throw new UnauthorizedError('Email or password invalid');
 
     const token = jwt.sign({ id: user.id }, String(process.env.AUTH_SECRET), { expiresIn: '7d' });
 
