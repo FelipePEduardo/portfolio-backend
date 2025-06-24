@@ -6,6 +6,7 @@ import UserMapper from '@infra/mappers/UserMapper';
 import { UserPartialQueryResponse, UserQueryResponse, UserRoleQueryResponse, UserSearchQueryReponse } from '../query-responses';
 import { User } from '@models/User';
 import UserRoleMapper from '@infra/mappers/UserRoleMapper';
+import { CustomError } from 'server/errors';
 
 @injectable()
 export default class UserRepository extends BaseRepository implements IUserRepository {
@@ -92,7 +93,7 @@ export default class UserRepository extends BaseRepository implements IUserRepos
 
     const userCreated = await this.getById(createdId);
 
-    if (!userCreated) throw new Error('Error while creating user');
+    if (!userCreated) throw new CustomError('Error while creating user', 404);
 
     return userCreated;
   }
@@ -104,7 +105,7 @@ export default class UserRepository extends BaseRepository implements IUserRepos
 
     const updatedUser = await this.getById(entity.id);
 
-    if (!updatedUser) throw new Error('Error while updating user');
+    if (!updatedUser) throw new CustomError('Error while updating user', 404);
 
     return updatedUser;
   }

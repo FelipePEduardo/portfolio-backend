@@ -7,6 +7,7 @@ import { SkillQueryResponse, SkillSearchQueryResponse } from '../query-responses
 import BaseRepository from './BaseRepository';
 import SkillMapper from '@infra/mappers/SkillMapper';
 import { Skill } from '@models/Skill';
+import { CustomError } from 'server/errors';
 
 @injectable()
 export default class SkillRepository extends BaseRepository implements ISkillRepository {
@@ -60,7 +61,7 @@ export default class SkillRepository extends BaseRepository implements ISkillRep
 
     const skillCreated = await this.getById(createdId);
 
-    if (!skillCreated) throw new Error('Error while creating skill');
+    if (!skillCreated) throw new CustomError('Error while creating skill', 404);
 
     return skillCreated;
   }
@@ -73,7 +74,7 @@ export default class SkillRepository extends BaseRepository implements ISkillRep
 
     const skillUpdated = await this.getById(entity.id);
 
-    if (!skillUpdated) throw new Error('Error while updating skill');
+    if (!skillUpdated) throw new CustomError('Error while updating skill', 404);
 
     return skillUpdated;
   }

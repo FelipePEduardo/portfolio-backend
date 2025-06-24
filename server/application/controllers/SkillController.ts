@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { Request } from 'express';
 import { injectable } from 'inversify';
 
 import { ISkillController } from '@interfaces/controllers';
@@ -11,51 +11,43 @@ import { validateContextParams } from '@application/helpers/validateContextParam
 export default class SkillController implements ISkillController {
   constructor(private service: ISkillService) {}
 
-  async getById(req: Request, res: Response) {
+  async getById(req: Request) {
     const { params } = getRequestInfo(req);
 
-    const id = validateNumericProp(params.id);
+    const id = validateNumericProp(params.id, 'id');
 
-    const skill = await this.service.getById(id);
+    const entity = await this.service.getById(id);
 
-    return res.json(skill);
+    return entity.toDto();
   }
 
-  async search(req: Request, res: Response) {
+  async search(req: Request) {
     const { query } = getRequestInfo(req);
 
-    const response = await this.service.search(query);
-
-    return res.json(response);
+    return this.service.search(query);
   }
 
-  async create(req: Request, res: Response) {
+  async create(req: Request) {
     const { body, contextParams } = getRequestInfo(req, SkillCreateSchema);
 
     const validatedContextParams = validateContextParams(contextParams);
 
-    const skill = await this.service.create(body, validatedContextParams);
-
-    return res.status(201).json(skill.toDto());
+    return this.service.create(body, validatedContextParams);
   }
 
-  async update(req: Request, res: Response) {
+  async update(req: Request) {
     const { body, params } = getRequestInfo(req, SkillUpdateSchema);
 
-    const id = validateNumericProp(params.id);
+    const id = validateNumericProp(params.id, 'id');
 
-    const skill = await this.service.update(id, body);
-
-    return res.status(201).json(skill.toDto());
+    return this.service.update(id, body);
   }
 
-  async delete(req: Request, res: Response) {
+  async delete(req: Request) {
     const { params } = getRequestInfo(req);
 
-    const id = validateNumericProp(params.id);
+    const id = validateNumericProp(params.id, 'id');
 
     await this.service.delete(id);
-
-    return res.sendStatus(204);
   }
 }

@@ -5,18 +5,19 @@ import { ISkillRepository, IUserRepository } from '@interfaces/repositories';
 import { SkillCreateDto, SkillUpdateDto } from '@DTO';
 import { Skill } from '@models/Skill';
 import { ContextParams } from '@DTO/ContexParams';
+import { EntityNotFound } from 'server/errors';
 
 @injectable()
 export default class SkillService implements ISkillService {
   constructor(
-    private repository: ISkillRepository,
-    private userRepository: IUserRepository,
+    private readonly repository: ISkillRepository,
+    private readonly userRepository: IUserRepository,
   ) {}
 
   async getById(id: number) {
     const skill = await this.repository.getById(id);
 
-    if (!skill) throw new Error('Entity not found');
+    if (!skill) throw new EntityNotFound('Skil', id);
 
     return skill;
   }
@@ -32,7 +33,9 @@ export default class SkillService implements ISkillService {
 
     const skillToCreate = new Skill({ ...dto, user });
 
-    return this.repository.create(skillToCreate);
+    const created = await this.repository.create(skillToCreate);
+
+    return created.toDto();
   }
 
   async update(id: number, dto: SkillUpdateDto) {
@@ -42,7 +45,9 @@ export default class SkillService implements ISkillService {
 
     skill.update(dto);
 
-    return this.repository.update(skill);
+    const updated = await this.repository.update(skill);
+
+    return updated.toDto();
   }
 
   async delete(id: number) {

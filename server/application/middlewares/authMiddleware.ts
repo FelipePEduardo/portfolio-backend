@@ -4,17 +4,19 @@ import jwt from 'jsonwebtoken';
 import container from '@infra/IoC';
 import { IUserRepository } from '@interfaces/repositories';
 import { User } from '@models/User';
+import { EntityNotFound, UnauthorizedError } from 'server/errors';
 
 const userRepository = container.get(IUserRepository);
 
 export async function authMiddleware(req: Request, res: Response, next: NextFunction) {
-  const authorization = req.headers['authorization'];
-
-  if (!authorization) {
-    throw new Error('Invalid token');
-  }
-
   try {
+    const authorization = req.headers['authorization'];
+
+    if (!authorization) {
+      next(new UnauthorizedError('Invalid token'));
+      return;
+    }
+
     const [, token] = authorization.split('Bearer ');
 
     jwt.verify(token, String(process.env.AUTH_SECRET));
@@ -27,12 +29,15 @@ export async function authMiddleware(req: Request, res: Response, next: NextFunc
       user = await userRepository.getById(decodedToken.id);
     }
 
-    if (!user) throw new Error('User not found');
+    if (!user) {
+      next(new EntityNotFound('User not found', 404));
+      return;
+    }
 
     req.contextParams = user.toJSON();
 
     next();
-  } catch {
-    throw new Error('Invalid token');
+  } catch (error) {
+    next(error);
   }
 }
