@@ -1,4 +1,4 @@
-import { RepositoriesDto, UserInformationDto } from '@DTO/Github';
+import { RepositoriesDto, UserInformationDto } from '@DTO';
 import { Request, Response } from 'express';
 
 export default abstract class IGithubController {

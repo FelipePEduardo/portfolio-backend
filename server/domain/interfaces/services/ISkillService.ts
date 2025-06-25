@@ -1,5 +1,4 @@
-import { SearchResponse, SkillCreateDto, SkillDto, SkillSearchDto, SkillUpdateDto } from '@DTO';
-import { ContextParams } from '@DTO/ContexParams';
+import { SearchResponse, SkillCreateDto, SkillDto, SkillSearchDto, SkillUpdateDto, ContextParams } from '@DTO';
 import { Skill } from '@models/Skill';
 
 export default abstract class ISkillService {

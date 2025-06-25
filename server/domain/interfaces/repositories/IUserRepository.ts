@@ -1,5 +1,5 @@
 import { User, UserPartial, UserRole } from '@models/User';
-import { SearchResponse, UserSearchDto } from 'server/DTO';
+import { SearchResponse, UserSearchDto } from '@DTO';
 
 export default abstract class IUserRepository {
   abstract getById(id: number): Promise<User | undefined>;

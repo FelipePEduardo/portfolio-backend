@@ -1,5 +1,5 @@
 import { User } from '@models/User';
-import { SearchResponse, UserCreateDto, UserSearchDto, UserUpdateDto } from 'server/DTO';
+import { SearchResponse, UserCreateDto, UserSearchDto, UserUpdateDto } from '@DTO';
 
 export default abstract class IUserService {
   abstract getById(id: number): Promise<User>;

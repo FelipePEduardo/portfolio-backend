@@ -1,4 +1,4 @@
-import { UserDto, UserSearchDto, SearchResponse } from '@DTO/User';
+import { UserDto, UserSearchDto, SearchResponse } from '@DTO';
 import { Request, Response } from 'express';
 
 export default abstract class IUserController {

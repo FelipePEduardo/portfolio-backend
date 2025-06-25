@@ -1,4 +1,4 @@
-import { RepositoriesDto, UserInformationDto } from '@DTO/Github';
+import { RepositoriesDto, UserInformationDto } from '@DTO';
 
 export default abstract class IGithubDAO {
   abstract getUserInformation(): Promise<UserInformationDto>;

@@ -1,4 +1,4 @@
-import { SkillDto, SkillSearchDto, SearchResponse } from '@DTO/Skill';
+import { SkillDto, SkillSearchDto, SearchResponse } from '@DTO';
 import { Request, Response } from 'express';
 
 export default abstract class ISkillController {

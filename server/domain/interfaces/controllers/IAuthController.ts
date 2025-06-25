@@ -1,4 +1,4 @@
-import { UserDto } from '@DTO/User';
+import { UserDto } from '@DTO';
 import { Request, Response } from 'express';
 
 export default abstract class IAuthController {
